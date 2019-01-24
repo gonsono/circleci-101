@@ -45,13 +45,9 @@ jobs:
             . venv/bin/activate
             pip install flake8
       - run:
-          name: Check Flake8
-          command: |
-            pip show -f flake8
-      - run:
           name: Run Flake8
           command: |
-            flake8 .
+            venv/bin/flake8 .
 workflows:
   version: 2
   CI-python:
