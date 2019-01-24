@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  get_source:
+    docker:
+      - image: circleci/python
+    steps:
+      - checkout           
+      - run:
+          name: Install Python deps in a venv
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - persist_to_workspace:
+          root: /
+          paths:
+            - venv
+  lint:
+    docker:
+      - image: circleci/python
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /
+      - run:
+          name: Install Flake8
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install flake8
+      - run:
+          name: Run Flake8
+          flake8 .
+workflows:
+  version: 2
+  CI-python:
+    jobs:
+      - get_source
+      - lint:
+          requires:
+            - get_source
