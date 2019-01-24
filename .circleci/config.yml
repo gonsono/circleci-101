@@ -14,13 +14,13 @@ jobs:
             . venv/bin/activate
             pip install -r requirements/dev.txt
       - save_cache:
-          keys: 
-            - deps1-{{ .Branch }}-{{ checksum "requirements/dev.txt" }}
-              paths:
-                - "venv"
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-              paths:
-                - ".git"
+          key: deps1-{{ .Branch }}-{{ checksum "requirements/dev.txt" }}
+          paths:
+            - "venv"
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
   lint:
     docker:
       - image: circleci/python
