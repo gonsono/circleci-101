@@ -129,6 +129,22 @@ jobs:
           name: Run LicCheck
           command: |
             venv/bin/liccheck -r requirements.txt -s strategy.ini
+  build_push:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+            - deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            build.sh
 workflows:
   version: 2
   CI-python:
@@ -147,3 +163,6 @@ workflows:
           requires:
             - test_coverage
             - lint
+      - build_push:
+          requires:
+            - check_licensing
