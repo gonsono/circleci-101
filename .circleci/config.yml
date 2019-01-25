@@ -144,7 +144,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            build.sh
+            docker build -t sample:0.1 .
 workflows:
   version: 2
   CI-python:
